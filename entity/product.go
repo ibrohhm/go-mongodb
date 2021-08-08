@@ -1,0 +1,9 @@
+package entity
+
+type Product struct {
+	ID     int     `json:"id"`
+	Name   string  `json:"name"`
+	Price  float64 `json:"price"`
+	Weight int     `json:"weight"`
+	Stock  int     `json:"stock"`
+}
