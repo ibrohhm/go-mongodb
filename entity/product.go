@@ -1,9 +1,11 @@
 package entity
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Product struct {
-	ID     int     `json:"id"`
-	Name   string  `json:"name"`
-	Price  float64 `json:"price"`
-	Weight int     `json:"weight"`
-	Stock  int     `json:"stock"`
+	ID     primitive.ObjectID `bson:"_id" json:"id"`
+	Name   string             `bson:"name" json:"name"`
+	Price  float64            `bson:"price" json:"price"`
+	Weight int                `bson:"weight" json:"weight"`
+	Stock  int                `bson:"stock" json:"stock"`
 }

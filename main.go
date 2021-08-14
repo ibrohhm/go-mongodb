@@ -25,6 +25,11 @@ func main() {
 
 	router := httprouter.New()
 	router.GET("/healtzh", pHandler.Healthz)
+	router.GET("/products", pHandler.GetAll)
+	router.GET("/products/:id", pHandler.Get)
+	router.POST("/products", pHandler.Insert)
+	router.PUT("/products/:id", pHandler.Update)
+	router.DELETE("/products/:id", pHandler.Delete)
 
 	port := os.Getenv("PORT")
 	if port == "" {
