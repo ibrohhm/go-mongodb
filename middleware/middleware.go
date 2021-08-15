@@ -45,7 +45,7 @@ func Middleware(handle Handler) httprouter.Handle {
 				"path":   r.URL.Path,
 				"query":  query.Encode(),
 				// "body":   string(body),
-			}).Info("")
+			}).Info("success")
 		}
 	}
 }

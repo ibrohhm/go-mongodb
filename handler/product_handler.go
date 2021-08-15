@@ -15,10 +15,10 @@ import (
 )
 
 type ProductHandler struct {
-	Repo *repository.ProductRepository
+	Repo repository.ProductRepositorier
 }
 
-func NewProductHandler(repo *repository.ProductRepository) *ProductHandler {
+func NewProductHandler(repo repository.ProductRepositorier) *ProductHandler {
 	return &ProductHandler{
 		Repo: repo,
 	}

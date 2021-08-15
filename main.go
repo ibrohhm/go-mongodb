@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-mongo/connection"
+	"github.com/go-mongo/database"
 	"github.com/go-mongo/handler"
 	m "github.com/go-mongo/middleware"
 	"github.com/go-mongo/repository"
@@ -26,10 +26,10 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn := connection.MongoDB(ctx)
-	defer conn.Disconnect(ctx)
+	client := database.NewMongoDB(ctx)
+	defer client.Disconnect(ctx)
 
-	pRepo := repository.NewProductRepository(conn)
+	pRepo := repository.NewProductRepository(client)
 	pHandler := handler.NewProductHandler(pRepo)
 
 	router := httprouter.New()
