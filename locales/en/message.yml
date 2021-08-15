@@ -1,0 +1,6 @@
+en:
+  message:
+    succeed: "success retrieve data %s"
+    inserted: "success insert new data %s"
+    updated: "data %s with id %v has been updated"
+    deleted: "data %s with id %v has been deleted"

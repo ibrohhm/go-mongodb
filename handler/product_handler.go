@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"io/ioutil"
@@ -11,6 +10,7 @@ import (
 	"github.com/go-mongo/repository"
 	"github.com/go-mongo/utility/response"
 	"github.com/julienschmidt/httprouter"
+	"github.com/kataras/i18n"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -24,108 +24,86 @@ func NewProductHandler(repo *repository.ProductRepository) *ProductHandler {
 	}
 }
 
-func (p *ProductHandler) Healthz(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(200)
-	json.NewEncoder(w).Encode("ok")
-}
-
-func (p *ProductHandler) Insert(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (p *ProductHandler) Insert(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
 	b, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
 	var product entity.Product
 	err = json.Unmarshal(b, &product)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
-
-	fmt.Printf("%+v", product)
 
 	newProduct, err := p.Repo.Insert(product)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	response.WriteSuccess(w, newProduct, "")
+	return response.WriteSuccess(w, newProduct, i18n.Tr("en", "en.message.inserted", "product"))
 }
 
-func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
 	products, err := p.Repo.GetAll()
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	response.WriteSuccess(w, products, "")
+	return response.WriteSuccess(w, products, i18n.Tr("en", "en.message.succeed", "product"))
 }
 
-func (p *ProductHandler) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (p *ProductHandler) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
 	_id, err := primitive.ObjectIDFromHex(ps.ByName("id"))
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
 	product, err := p.Repo.Get(_id)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	response.WriteSuccess(w, product, "")
+	return response.WriteSuccess(w, product, i18n.Tr("en", "en.message.succeed", "product"))
 }
 
-func (p *ProductHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (p *ProductHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
 	_id, err := primitive.ObjectIDFromHex(ps.ByName("id"))
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
 	b, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
 	var product entity.Product
 	err = json.Unmarshal(b, &product)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	fmt.Printf("%+v", product)
-
-	product, err = p.Repo.Update(_id, product)
+	newProduct, err := p.Repo.Update(_id, product)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	response.WriteSuccess(w, product, "")
+	return response.WriteSuccess(w, newProduct, i18n.Tr("en", "en.message.updated", "product", _id.Hex()))
 }
 
-func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
 	_id, err := primitive.ObjectIDFromHex(ps.ByName("id"))
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
 	err = p.Repo.Delete(_id)
 	if err != nil {
-		response.WriteError(w, err)
-		return
+		return response.WriteError(w, err)
 	}
 
-	response.WriteSuccess(w, nil, "success")
+	return response.WriteSuccess(w, nil, i18n.Tr("en", "en.message.deleted", "product", _id.Hex()))
 }
