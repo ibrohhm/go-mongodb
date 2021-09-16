@@ -14,6 +14,7 @@ type ProductDB struct {
 	collection *mongo.Collection
 }
 
+// mockgen --source=database/product_database.go --destination=mock/product_database.go -package=mock
 type ProductDBer interface {
 	InsertOne(ctx context.Context, document interface{}, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error)
 	Find(ctx context.Context, filter interface{}, opts ...*options.FindOptions) (*mongo.Cursor, error)

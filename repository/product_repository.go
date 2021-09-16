@@ -7,7 +7,6 @@ import (
 	"github.com/go-mongo/entity"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -15,6 +14,7 @@ type ProductRepository struct {
 	db database.ProductDBer
 }
 
+// mockgen --source=repository/product_repository.go --destination=mock/product_repository.go -package=mock
 type ProductRepositorier interface {
 	Insert(product entity.Product) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
@@ -23,9 +23,9 @@ type ProductRepositorier interface {
 	Delete(_id primitive.ObjectID) error
 }
 
-func NewProductRepository(client *mongo.Client) *ProductRepository {
+func NewProductRepository(db database.ProductDBer) *ProductRepository {
 	return &ProductRepository{
-		db: database.NewProductDB(client, "go_mongo_learn", "product"),
+		db: db,
 	}
 }
 

@@ -29,7 +29,8 @@ func main() {
 	client := database.NewMongoDB(ctx)
 	defer client.Disconnect(ctx)
 
-	pRepo := repository.NewProductRepository(client)
+	pDB := database.NewProductDB(client, "go_mongo_learn", "product")
+	pRepo := repository.NewProductRepository(pDB)
 	pHandler := handler.NewProductHandler(pRepo)
 
 	router := httprouter.New()
