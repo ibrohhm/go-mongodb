@@ -6,11 +6,11 @@ import (
 
 	"io/ioutil"
 
+	"github.com/go-mongo/config"
 	"github.com/go-mongo/entity"
 	"github.com/go-mongo/repository"
 	"github.com/go-mongo/utility/response"
 	"github.com/julienschmidt/httprouter"
-	"github.com/kataras/i18n"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -42,7 +42,7 @@ func (p *ProductHandler) Insert(w http.ResponseWriter, r *http.Request, ps httpr
 		return response.WriteError(w, err)
 	}
 
-	return response.WriteSuccess(w, newProduct, i18n.Tr("en", "en.message.inserted", "product"))
+	return response.WriteSuccess(w, newProduct, config.GetLocalization("en", "en.message.inserted", "product"))
 }
 
 func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
@@ -51,7 +51,7 @@ func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request, ps httpr
 		return response.WriteError(w, err)
 	}
 
-	return response.WriteSuccess(w, products, i18n.Tr("en", "en.message.succeed", "product"))
+	return response.WriteSuccess(w, products, config.GetLocalization("en", "en.message.succeed", "product"))
 }
 
 func (p *ProductHandler) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
@@ -65,7 +65,7 @@ func (p *ProductHandler) Get(w http.ResponseWriter, r *http.Request, ps httprout
 		return response.WriteError(w, err)
 	}
 
-	return response.WriteSuccess(w, product, i18n.Tr("en", "en.message.succeed", "product"))
+	return response.WriteSuccess(w, product, config.GetLocalization("en", "en.message.succeed", "product"))
 }
 
 func (p *ProductHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
@@ -91,7 +91,7 @@ func (p *ProductHandler) Update(w http.ResponseWriter, r *http.Request, ps httpr
 		return response.WriteError(w, err)
 	}
 
-	return response.WriteSuccess(w, newProduct, i18n.Tr("en", "en.message.updated", "product", _id.Hex()))
+	return response.WriteSuccess(w, newProduct, config.GetLocalization("en", "en.message.updated", "product", _id.Hex()))
 }
 
 func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
@@ -105,5 +105,5 @@ func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request, ps httpr
 		return response.WriteError(w, err)
 	}
 
-	return response.WriteSuccess(w, nil, i18n.Tr("en", "en.message.deleted", "product", _id.Hex()))
+	return response.WriteSuccess(w, nil, config.GetLocalization("en", "en.message.deleted", "product", _id.Hex()))
 }
